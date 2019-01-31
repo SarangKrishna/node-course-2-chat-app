@@ -12,14 +12,19 @@ app.use(express.static(publicPath));
 io.on('connection', (socket)=>{
   console.log('New user connected');
 
-  socket.emit('newMessage', {
-    from: "Sanand",
-    text: "HAiiii",
-    createdAt: 1234
-  });
+  // socket.emit('newMessage', {                 //EMITS MESSAGES TO A SINGLE USER
+  //   from: "Sanand",
+  //   text: "HAiiii",
+  //   createdAt: 1234
+  // });
 
   socket.on('createMessage', (message)=>{
     console.log('createMessage', message);
+    io.emit('newMessage', {               //EMITS MESSAGEGES TO MULTIPLE USERS
+      from:message.from,
+      text:message.text,
+      createdAt:new Date().getTime()
+    });
   });
 
   socket.on('disconnect',()=>{
